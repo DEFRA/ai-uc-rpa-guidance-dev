@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "repos/ai-uc-rpa-guidance"
+    },
+    {
+      "path": "repos/ai-uc-rpa-guidance-fe"
+    }
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/node_modules/**": true,
+      "**/dist/**": true,
+      "**/build/**": true,
+      "**/.venv/**": true
+    },
+    "python.terminal.activateEnvironment": false
+  }
+}

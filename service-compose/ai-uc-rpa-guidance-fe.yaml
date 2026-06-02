@@ -1,0 +1,27 @@
+services:
+  ai-uc-rpa-guidance-fe:
+    build:
+      target: development
+      context: ../repos/ai-uc-rpa-guidance-fe
+    ports:
+      - '3000:3000'
+    links:
+      - "floci:floci"
+      - 'redis:redis'
+    depends_on:
+      floci:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - "../.env"
+    volumes:
+      - ../repos/ai-uc-rpa-guidance-fe/src/:/home/node/src
+      - ../repos/ai-uc-rpa-guidance-fe/package.json:/home/node/package.json
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      REDIS_HOST: redis
+      USE_SINGLE_INSTANCE_CACHE: true
+    networks:
+      - ai-uc-rpa-guidance
