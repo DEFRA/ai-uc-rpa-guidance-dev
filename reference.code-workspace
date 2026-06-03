@@ -18,6 +18,11 @@
       "**/build/**": true,
       "**/.venv/**": true
     },
+    "python.analysis.extraPaths": [
+        "./ai-uc-rpa-guidance/.venv/bin",
+        "./ai-uc-rpa-guidance/.venv/lib/python3.13/site-packages",
+        "./ai-uc-rpa-guidance/.venv/lib64/python3.13/site-packages",
+    ],
     "python.terminal.activateEnvironment": false
   }
 }
