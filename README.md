@@ -25,9 +25,9 @@ You will need to clone this repository and sync the environment before running t
 By default, service repositories are cloned into the parent directory of `ai-uc-rpa-guidance`. Therefore, we recommend creating a directory specifically for the RPA Guidance project and cloning all repositories into it.
 
 ```bash
-git clone https://github.com/DEFRA/ai-uc-rpa-guidance
+git clone https://github.com/DEFRA/ai-uc-rpa-guidance-dev
 
-cd ai-uc-rpa-guidance/
+cd ai-uc-rpa-guidance-dev/
 
 uv sync --frozen
 ```
@@ -80,13 +80,13 @@ All configuration is stored in the `.env` file. Before starting the services, en
 To start all services, run the following command:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 To stop the services, run the following command:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 The services can still be started individually directly from their respective repositories. However, this project is intended to streamline local development by having a common entry point for all services.
