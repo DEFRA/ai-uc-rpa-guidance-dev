@@ -18,6 +18,7 @@ services:
     volumes:
       - ../repos/ai-uc-rpa-guidance-fe/src/:/home/node/src
       - ../repos/ai-uc-rpa-guidance-fe/package.json:/home/node/package.json
+      - ../repos/ai-uc-rpa-guidance-fe/data:/home/node/data:ro
     environment:
       PORT: 3000
       NODE_ENV: development
