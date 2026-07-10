@@ -11,8 +11,11 @@ services:
       - '.env'
     environment:
       FLOCI_DEFAULT_REGION: eu-west-2
+      FLOCI_STORAGE_MODE: hybrid
+      FLOCI_STORAGE_PERSISTENT_PATH: /data
     volumes:
       - ./compose/floci/start.d:/etc/floci/init/start.d:ro
+      - floci-data:/data
     healthcheck:
       test:
         - CMD
@@ -41,6 +44,7 @@ services:
       - ai-uc-rpa-guidance
       - cdpuploader
 volumes:
+  floci-data:
   mongodb-data:
 networks:
   ai-uc-rpa-guidance:
