@@ -12,10 +12,10 @@ services:
     environment:
       FLOCI_DEFAULT_REGION: eu-west-2
       FLOCI_STORAGE_MODE: hybrid
-      FLOCI_STORAGE_PERSISTENT_PATH: /data
+      FLOCI_STORAGE_PERSISTENT_PATH: ./data
     volumes:
       - ./compose/floci/start.d:/etc/floci/init/start.d:ro
-      - floci-data:/data
+      - floci-data:/app/data
     healthcheck:
       test:
         - CMD
