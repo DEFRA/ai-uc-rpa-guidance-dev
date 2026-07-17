@@ -24,5 +24,6 @@ services:
       NODE_ENV: development
       REDIS_HOST: redis
       USE_SINGLE_INSTANCE_CACHE: true
+      GUIDANCE_API_URL: http://ai-uc-rpa-guidance:8085
     networks:
       - ai-uc-rpa-guidance

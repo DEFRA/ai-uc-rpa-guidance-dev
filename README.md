@@ -17,6 +17,7 @@ Local development support for running / developing RPA guidance use case PoC loc
 |---------|------|----------|
 | [ai-uc-rpa-guidance-ui](https://github.com/DEFRA/ai-uc-rpa-guidance-fe) | Frontend | JavaScript |
 | [ai-uc-rpa-guidance-runtime](https://github.com/DEFRA/ai-uc-rpa-guidance) | Backend/Runtime | Python |
+| [ai-uc-rpa-guidance-evals-runtime](https://github.com/DEFRA/ai-uc-rpa-guidance-evals-runtime) | Evaluations runtime | Python |
 
 ## Local Development
 
@@ -70,6 +71,7 @@ Refer to the table below for environment variables, their defaults, and whether 
 | AWS_EMF_NAMESPACE | namespace | No | EMF metrics namespace |
 | AWS_EMF_SERVICE_NAME | service-name | No | Logical service name for EMF metrics |
 | AWS_EMF_SERVICE_TYPE | python-backend-service | No | Service type used by EMF instrumentation |
+| ASSETS_S3_BUCKET | ai-uc-rpa-guidance-evals-assets | No | S3 bucket used by the evals runtime for assets |
 
 ### Starting the Services
 

@@ -7,3 +7,4 @@
 #aws sqs create-queue --queue-name my-queue
 
 aws s3 mb --endpoint-url=http://localhost:4566 s3://ai-uc-rpa-guidance-docs || true
+aws s3 mb --endpoint-url=http://localhost:4566 s3://ai-uc-rpa-guidance-evals-assets || true

@@ -1,6 +1,7 @@
 include:
   - ./service-compose/ai-uc-rpa-guidance.yaml
   - ./service-compose/ai-uc-rpa-guidance-fe.yaml
+  - ./service-compose/ai-uc-rpa-guidance-evals-runtime.yaml
   - ./dependencies/cdp-uploader.yaml
 services:
   floci:
