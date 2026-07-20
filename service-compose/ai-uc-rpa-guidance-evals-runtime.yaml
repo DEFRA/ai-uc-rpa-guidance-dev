@@ -1,0 +1,39 @@
+services:
+  ai-uc-rpa-guidance-evals-runtime:
+    build:
+      target: development
+      context: ../repos/ai-uc-rpa-guidance-evals-runtime
+    ports:
+      - 8285:8285
+    links:
+      - "floci:floci"
+      - "mongodb:mongodb"
+    depends_on:
+      floci:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      ai-uc-rpa-guidance:
+        condition: service_started
+    env_file:
+      - "../.env"
+    environment:
+      PYTHON_ENV: development # enables uvicorn hot reload
+      PORT: 8285 # hard-set: ${PORT:-...} would collide with the backend's PORT
+      HOST: ${HOST:-0.0.0.0}
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017/}
+      # Hard-set, not ${VAR:-default}: ../.env holds host-oriented values that would win.
+      FLOCI_ENDPOINT_URL: http://floci:4566
+      AWS_ENDPOINT_URL: http://floci:4566
+      CALLBACK_BASE_URL: http://host.docker.internal:8285 # ../.env's value points at the backend (8085)
+      ASSETS_S3_BUCKET: ${ASSETS_S3_BUCKET:-ai-uc-rpa-guidance-evals-assets}
+      GUIDANCE_API_URL: http://ai-uc-rpa-guidance:8085
+    volumes:
+      - ../repos/ai-uc-rpa-guidance-evals-runtime/app:/home/nonroot/app
+    develop:
+      watch:
+        - action: rebuild
+          path: ../repos/ai-uc-rpa-guidance-evals-runtime/pyproject.toml
+          target: /home/nonroot/pyproject.toml
+    networks:
+      - ai-uc-rpa-guidance
