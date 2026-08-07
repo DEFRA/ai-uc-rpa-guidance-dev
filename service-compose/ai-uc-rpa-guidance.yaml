@@ -3,7 +3,8 @@ services:
     build:
       target: development
       context: ../repos/ai-uc-rpa-guidance
-      secrets: [ca-bundle]
+      additional_contexts:
+        ca-bundle: ${CA_BUNDLE_DIR:-../compose/ca-bundle}
     ports:
       - 8085:8085
     links:
@@ -33,6 +34,3 @@ services:
           target: /home/nonroot/pyproject.toml
     networks:
       - ai-uc-rpa-guidance
-secrets:
-  ca-bundle:
-    file: ${CA_BUNDLE_PATH:-/dev/null}

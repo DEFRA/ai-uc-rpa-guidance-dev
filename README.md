@@ -72,6 +72,7 @@ Refer to the table below for environment variables, their defaults, and whether 
 | AWS_EMF_SERVICE_NAME | service-name | No | Logical service name for EMF metrics |
 | AWS_EMF_SERVICE_TYPE | python-backend-service | No | Service type used by EMF instrumentation |
 | ASSETS_S3_BUCKET | ai-uc-rpa-guidance-evals-assets | No | S3 bucket used by the evals runtime for assets |
+| CA_BUNDLE_DIR | _(empty)_ | No | Directory of PEM certificates to add to the containers' trust store. Only needed behind a TLS-inspecting proxy — see [Corporate proxy / custom CAs](#corporate-proxy--custom-cas) |
 
 ### Starting the Services
 
@@ -92,6 +93,40 @@ docker compose down
 ```
 
 The services can still be started individually directly from their respective repositories. However, this project is intended to streamline local development by having a common entry point for all services.
+
+### Corporate proxy / custom CAs
+
+On a network that intercepts TLS (for example AVD), containers will not trust the
+proxy's certificate and calls to PyPI, Bedrock and S3 fail with
+`CERTIFICATE_VERIFY_FAILED`. Set `CA_BUNDLE_DIR` in your `.env` to a directory
+containing the certificates to trust:
+
+```bash
+CA_BUNDLE_DIR=/path/to/certs
+```
+
+Then populate that directory with the [`certs`](#certs) script, which works out
+which certificates are needed and writes them there:
+
+```bash
+uv run task certs
+```
+
+Every `*.crt` / `*.pem` file in that directory is appended to the containers'
+system trust store at build time (duplicates are removed), which covers `uv`
+during the build and `httpx`, `boto3` and `pymongo` at runtime.
+
+> [!IMPORTANT]
+> Include the **whole chain** up to and including the self-signed root, not just
+> the issuing CA. A partial chain fails with `unable to get issuer certificate`
+> rather than a more obvious trust error.
+
+Leave `CA_BUNDLE_DIR` unset if you are not behind such a proxy — the default is an
+empty directory and the build is unaffected.
+
+`docker compose up --build` picks up certificate changes automatically: the trust
+store layer is keyed on the *contents* of `CA_BUNDLE_DIR`, so it rebuilds when the
+certificates change and is reused when they have not. No `--no-cache` needed.
 
 ## Network
 
@@ -124,3 +159,19 @@ Switches to and pulls the latest main branch for each microservice.
 ```bash
 uv run task update
 ```
+
+### Certs
+
+Extracts the certificates needed behind a TLS-inspecting proxy into `CA_BUNDLE_DIR`.
+Only needed on such a network — see [Corporate proxy / custom CAs](#corporate-proxy--custom-cas).
+
+```bash
+uv run task certs
+```
+
+It connects to the services' upstream hosts, takes the chain each one actually
+serves, then walks upwards through your machine's trust stores (including the
+Windows certificate store under WSL) until it reaches a self-signed root — the
+part the proxy does not send and the usual cause of `unable to get issuer
+certificate`. Chains that are already publicly trusted are skipped. Re-run it if
+the corporate certificates are rotated.

@@ -3,7 +3,8 @@ services:
     build:
       target: development
       context: ../repos/ai-uc-rpa-guidance-fe
-      secrets: [ca-bundle]
+      additional_contexts:
+        ca-bundle: ${CA_BUNDLE_DIR:-../compose/ca-bundle}
     ports:
       - '3000:3000'
     links:
@@ -28,6 +29,3 @@ services:
       GUIDANCE_API_URL: http://ai-uc-rpa-guidance:8085
     networks:
       - ai-uc-rpa-guidance
-secrets:
-  ca-bundle:
-    file: ${CA_BUNDLE_PATH:-/dev/null}
