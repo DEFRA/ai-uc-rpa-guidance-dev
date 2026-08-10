@@ -36,7 +36,9 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb-data:/data
+      # Must match the image's declared VOLUME exactly; a mount on /data is
+      # shadowed by an anonymous volume at /data/db and persists nothing.
+      - mongodb-data:/data/db
   redis:
     image: redis@sha256:3ce533b2b057f74b235d1d8697ae08b1b6ff0a5e16827ea6a377b6365693c7ed # 7.2.3-alpine3.18
     ports:
