@@ -72,7 +72,7 @@ Refer to the table below for environment variables, their defaults, and whether 
 | AWS_EMF_SERVICE_NAME | service-name | No | Logical service name for EMF metrics |
 | AWS_EMF_SERVICE_TYPE | python-backend-service | No | Service type used by EMF instrumentation |
 | ASSETS_S3_BUCKET | ai-uc-rpa-guidance-evals-assets | No | S3 bucket used by the evals runtime for assets |
-| CA_BUNDLE_DIR | _(empty)_ | No | Directory of PEM certificates to add to the containers' trust store. Only needed behind a TLS-inspecting proxy — see [Corporate proxy / custom CAs](#corporate-proxy--custom-cas) |
+| CA_BUNDLE_DIR | _(empty)_ | No | Directory of `*.crt` certificates to add to the containers' trust store. Only needed behind a TLS-inspecting proxy — see [Corporate proxy / custom CAs](#corporate-proxy--custom-cas) |
 
 ### Starting the Services
 
@@ -112,9 +112,12 @@ which certificates are needed and writes them there:
 uv run task certs
 ```
 
-Every `*.crt` / `*.pem` file in that directory is appended to the containers'
-system trust store at build time (duplicates are removed), which covers `uv`
-during the build and `httpx`, `boto3` and `pymongo` at runtime.
+Every `*.crt` file in that directory is appended to the containers' system trust
+store at build time (duplicates are removed), which covers `uv` during the build
+and `httpx`, `boto3` and `pymongo` at runtime. Only `*.crt` files are read — so
+a stray private key can never end up in an image — and they must be PEM-encoded
+(`-----BEGIN CERTIFICATE-----`); rename a PEM-encoded `.pem` file to `.crt` to
+include it.
 
 > [!IMPORTANT]
 > Include the **whole chain** up to and including the self-signed root, not just
